@@ -1,19 +1,20 @@
 class PopularModel {
-  PopularModel({this.method, this.status, this.results});
+  PopularModel(
+      {this.method, this.status, this.results = const <ResultPopular>[]});
 
   PopularModel.fromJson(Map<String, dynamic> json) {
     method = json['method'];
     status = json['status'];
     if (json['results'] != null) {
-      results = <Results>[];
+      results = <ResultPopular>[];
       json['results'].forEach((v) {
-        results!.add(Results.fromJson(v));
+        results!.add(ResultPopular.fromJson(v));
       });
     }
   }
   String? method;
   bool? status;
-  List<Results>? results;
+  List<ResultPopular>? results;
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
@@ -26,8 +27,8 @@ class PopularModel {
   }
 }
 
-class Results {
-  Results({
+class ResultPopular {
+  ResultPopular({
     this.title,
     this.thumb,
     this.key,
@@ -36,7 +37,7 @@ class Results {
     this.difficulty,
   });
 
-  Results.fromJson(Map<String, dynamic> json) {
+  ResultPopular.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     thumb = json['thumb'];
     key = json['key'];

@@ -15,15 +15,12 @@ class TabFavorite extends GetView<HomeController> {
         itemCount: controller.favItem.length,
         itemBuilder: (context, index) {
           return CardFoods(
-            tittle: controller.favItem[index]['title'],
+            tittle: controller.favItem[index].title ?? '',
             favIcon: 'BookmarkInactive.png',
             rating: '4.5',
-            imageUrl: controller.favItem[index]['image_url'],
+            imageUrl: controller.favItem[index].thumb ?? '',
             onTap: () {
-              controller.addToFav(
-                title: controller.favItem[index]['title'],
-                imageUrl: controller.favItem[index]['image_url'],
-              );
+              controller.addToFav(data: controller.favItem[index]);
             },
           );
         },

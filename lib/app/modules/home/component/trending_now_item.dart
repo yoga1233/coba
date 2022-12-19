@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:coba/app/data/model/popular_model.dart';
 import 'package:coba/app/modules/home/component/trending_now_item_shimmer.dart';
 import 'package:coba/app/modules/home/controllers/home_controller.dart';
 import 'package:coba/app/widgets/cards/card_food.dart';
@@ -12,11 +13,13 @@ class TrendingNowItem extends GetView<HomeController> {
     required this.title,
     required this.imageUrl,
     required this.isSelect,
+    required this.data,
   });
 
   final String title;
   final String imageUrl;
   final bool isSelect;
+  final ResultPopular data;
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +29,7 @@ class TrendingNowItem extends GetView<HomeController> {
       imageUrl: imageUrl,
       favIcon: isSelect ? 'BookmarkActive.png' : 'BookmarkInactive.png',
       onTap: () {
-        controller.addToFav(
-          title: title,
-          imageUrl: imageUrl,
-        );
+        controller.addToFav(data: data);
       },
     );
   }

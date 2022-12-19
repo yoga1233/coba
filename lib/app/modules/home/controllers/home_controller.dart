@@ -78,7 +78,7 @@ class HomeController extends GetxController {
 
   FocusNode inputFocusNode = FocusNode();
 
-  RxList favItem = [].obs;
+  RxList<ResultPopular> favItem = <ResultPopular>[].obs;
 
   setPage(int index) => indexPage.value = index;
 
@@ -108,14 +108,14 @@ class HomeController extends GetxController {
     getPopular(recipesCategory[indexCategori.value]['key']);
   }
 
-  addToFav({required String title, required String imageUrl}) {
+  addToFav({required ResultPopular data}) {
     try {
-      if (favItem.any((element) => element['title'] == title)) {
-        FavService.removeFav(title);
-        favItem(FavService.favItem);
+      if (favItem.any((element) => element == data)) {
+        FavService.removeFav(data.title!);
+        favItem.remove(data);
       } else {
-        FavService.addFav(title: title, imageUrl: imageUrl);
-        favItem(FavService.favItem);
+        FavService.addFav(title: data.title!, imageUrl: data.thumb!);
+        favItem.add(data);
       }
       logSys('item favorite : ${favItem.length}');
     } catch (e) {
@@ -125,19 +125,8 @@ class HomeController extends GetxController {
 
   clearAllFavorite() {
     FavService.removeAll();
-    favItem(FavService.favItem);
+    favItem.clear();
     logSys('item favorite : ${favItem.length}');
-  }
-
-  containFav(String key) {
-    final contain = favItem.where((element) => element['title'] == key);
-    if (contain.isEmpty) {
-      logSys(true.toString());
-      return true;
-    } else {
-      logSys(false.toString());
-      return false;
-    }
   }
 
   @override

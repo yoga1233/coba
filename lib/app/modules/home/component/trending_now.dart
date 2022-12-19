@@ -12,55 +12,60 @@ class TrendingNow extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(
-        left: 16.w,
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(right: 16.w),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Trending now 🔥',
-                  style: TextStyles.title.copyWith(fontSize: 20.w),
-                ),
-                ButtonText(onTap: () {}),
-              ],
+    return Obx(() {
+      return Container(
+        padding: EdgeInsets.only(
+          left: 16.w,
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(right: 16.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Trending now 🔥',
+                    style: TextStyles.title.copyWith(fontSize: 20.w),
+                  ),
+                  ButtonText(onTap: () {}),
+                ],
+              ),
             ),
-          ),
-          verticalSpace(16.h),
-          SizedBox(
-            height: 222.h,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return Obx(() {
+            verticalSpace(16.h),
+            SizedBox(
+              height: 222.h,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: controller.isLoadTrending.value
+                    ? 5
+                    : controller.popular.value.results!.length,
+                itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.only(right: 16.w),
                     child: controller.isLoadTrending.value
                         ? const TrendingNowItemShimmer()
-                        : TrendingNowItem(
-                            imageUrl:
-                                controller.popular.value.results![index].thumb!,
-                            title:
-                                controller.popular.value.results![index].key!,
-                            isSelect: controller.favItem.any(
-                              (element) =>
-                                  element['title'] ==
+                        : Obx(() {
+                            return TrendingNowItem(
+                              data: controller.popular.value.results![index],
+                              imageUrl: controller
+                                  .popular.value.results![index].thumb!,
+                              title:
                                   controller.popular.value.results![index].key!,
-                            ),
-                          ),
+                              isSelect: controller.favItem.any(
+                                (element) =>
+                                    element ==
+                                    controller.popular.value.results![index],
+                              ),
+                            );
+                          }),
                   );
-                });
-              },
+                },
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 }

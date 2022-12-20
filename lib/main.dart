@@ -2,7 +2,7 @@ import 'package:coba/app/data/app_sessions.dart';
 import 'package:coba/app/routes/app_pages.dart';
 import 'package:coba/app/services/db_service.dart';
 import 'package:coba/app/services/fav_services.dart';
-import 'package:coba/app/services/fav_services.dart';
+import 'package:coba/app/services/recent_services.dart';
 import 'package:coba/app/utils/app_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,7 +18,9 @@ void main() async {
   mainStorage = await Hive.openBox('mainStorage');
   AppSessions.load();
   await FavService.loadFav();
+  await RecentService.loadRecent();
   logSys('Favorite item : ${FavService.favItem.length}');
+  logSys('Recent item : ${RecentService.recent.length}');
   logSys('isOnBoarding : ${AppSessions.isOnBoarding}');
   WidgetsFlutterBinding.ensureInitialized();
   runApp(

@@ -1,7 +1,7 @@
 import 'package:coba/app/modules/home/component/home_header.dart';
-import 'package:coba/app/modules/home/component/popular_category.dart';
-import 'package:coba/app/modules/home/component/recent_recipes.dart';
-import 'package:coba/app/modules/home/component/trending_now.dart';
+import 'package:coba/app/modules/home/component/home_popular_category.dart';
+import 'package:coba/app/modules/home/component/home_recent_recipes.dart';
+import 'package:coba/app/modules/home/component/home_trending_now.dart';
 import 'package:coba/app/modules/home/controllers/home_controller.dart';
 import 'package:coba/app/styles/styles.dart';
 import 'package:coba/app/widgets/inputs/input_search.dart';

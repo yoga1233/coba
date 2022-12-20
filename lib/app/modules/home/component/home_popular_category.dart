@@ -1,9 +1,9 @@
-import 'package:coba/app/modules/home/component/popular_category_item_shimmer.dart';
+import 'package:coba/app/modules/home/component/home_popular_category_item.dart';
+import 'package:coba/app/modules/home/component/home_popular_category_item_shimmer.dart';
 import 'package:coba/app/modules/home/controllers/home_controller.dart';
 import 'package:coba/app/styles/colors.dart';
 import 'package:coba/app/styles/styles.dart';
 import 'package:coba/app/widgets/buttons/button_primary.dart';
-import 'package:coba/app/widgets/cards/card_popular.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -79,15 +79,20 @@ class PopularCategory extends GetView<HomeController> {
                   scrollDirection: Axis.horizontal,
                   itemCount: controller.popular.value.results!.length,
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.only(right: 16.w),
-                      child: CardPopular(
+                    return Obx(() {
+                      return PopularCategoriItem(
+                        title: controller.popular.value.results![index].key!,
                         imageUrl:
                             controller.popular.value.results![index].thumb!,
-                        tittle: controller.popular.value.results![index].key!,
+                        isSelect: controller.favItem.any(
+                          (element) =>
+                              element ==
+                              controller.popular.value.results![index],
+                        ),
+                        data: controller.popular.value.results![index],
                         time: controller.popular.value.results![index].times!,
-                      ),
-                    );
+                      );
+                    });
                   },
                 ),
               )

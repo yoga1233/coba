@@ -3,6 +3,7 @@ import 'package:coba/app/styles/colors.dart';
 import 'package:coba/app/styles/styles.dart';
 import 'package:coba/app/utils/app_asset.dart';
 import 'package:coba/app/utils/extension/ext_string.dart';
+import 'package:coba/app/utils/custom_icons.dart';
 import 'package:coba/app/widgets/others/load_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,14 +15,22 @@ class CardFoods extends StatelessWidget {
     required this.tittle,
     this.imageUrl = 'https://i.ibb.co/S32HNjD/no-image.jpg',
     required this.rating,
-    this.onTap,
+    this.onTapFavIcon,
     required this.favIcon,
+    this.height,
+    this.width,
+    this.marginBottom,
+    this.onTapImage,
   });
   final String tittle;
   final String imageUrl;
   final String rating;
   final String favIcon;
-  final Function()? onTap;
+  final double? height;
+  final double? width;
+  final double? marginBottom;
+  final Function()? onTapFavIcon;
+  final Function()? onTapImage;
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +41,12 @@ class CardFoods extends StatelessWidget {
             Stack(
               children: [
                 InkWell(
-                  onTap: () {
-                    FocusScope.of(context).unfocus();
-                    Get.toNamed(Routes.DETAIL_RECIPE, arguments: tittle);
-                  },
+                  onTap: onTapImage,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: LoadImage(
-                      height: 180.h,
-                      width: 280.w,
+                      height: height ?? 180.h,
+                      width: width ?? 280.w,
                       imageUrl: imageUrl,
                     ),
                   ),
@@ -56,11 +62,15 @@ class CardFoods extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        Image.asset(
-                          AppAsset.icon('Star.png'),
-                          width: 15.w,
-                          height: 18.h,
+                        Icon(
+                          CustomIcons.star,
+                          size: 16.w,
                         ),
+                        // Image.asset(
+                        //   AppAsset.icon('Star.png'),
+                        //   width: 15.w,
+                        //   height: 18.h,
+                        // ),
                         horizontalSpace(3),
                         Text(
                           rating,
@@ -78,7 +88,7 @@ class CardFoods extends StatelessWidget {
             ),
             verticalSpace(10.h),
             SizedBox(
-              width: 280.w,
+              width: width ?? 280.w,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -97,13 +107,14 @@ class CardFoods extends StatelessWidget {
                 ],
               ),
             ),
+            verticalSpace(marginBottom ?? 0)
           ],
         ),
         Positioned(
           top: 8.h,
           right: 8.w,
           child: InkWell(
-            onTap: onTap,
+            onTap: onTapFavIcon,
             child: Container(
               padding: EdgeInsets.all(8.w),
               decoration: const BoxDecoration(
@@ -117,7 +128,7 @@ class CardFoods extends StatelessWidget {
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }

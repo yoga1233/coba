@@ -1,7 +1,9 @@
+import 'package:coba/app/modules/home/component/favorite_header.dart';
+import 'package:coba/app/modules/home/component/favorite_list_favorite.dart';
 import 'package:coba/app/modules/home/controllers/home_controller.dart';
-import 'package:coba/app/utils/app_utils.dart';
-import 'package:coba/app/widgets/cards/card_food.dart';
+import 'package:coba/app/styles/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class TabFavorite extends GetView<HomeController> {
@@ -9,22 +11,13 @@ class TabFavorite extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return ListView.builder(
-        shrinkWrap: true,
-        itemCount: controller.favItem.length,
-        itemBuilder: (context, index) {
-          return CardFoods(
-            tittle: controller.favItem[index].title ?? '',
-            favIcon: 'BookmarkInactive.png',
-            rating: '4.5',
-            imageUrl: controller.favItem[index].thumb ?? '',
-            onTap: () {
-              controller.addToFav(data: controller.favItem[index]);
-            },
-          );
-        },
-      );
-    });
+    return Column(
+      children: [
+        const FavoriteHeader(),
+        verticalSpace(12.h),
+        const ListFavorite(),
+        verticalSpace(12.h),
+      ],
+    );
   }
 }

@@ -1,6 +1,9 @@
 class PopularModel {
-  PopularModel(
-      {this.method, this.status, this.results = const <ResultPopular>[]});
+  PopularModel({
+    this.method,
+    this.status,
+    this.results = const <ResultPopular>[],
+  });
 
   PopularModel.fromJson(Map<String, dynamic> json) {
     method = json['method'];

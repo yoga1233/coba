@@ -1,8 +1,8 @@
 import 'package:coba/app/data/model/category_model.dart';
 import 'package:coba/app/data/model/popular_model.dart';
-import 'package:coba/app/data/model/trending_model.dart';
 import 'package:coba/app/services/api_services.dart';
 import 'package:coba/app/services/fav_services.dart';
+import 'package:coba/app/services/recent_services.dart';
 import 'package:coba/app/utils/app_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -63,22 +63,29 @@ class HomeController extends GetxController {
     }
   ];
 
+  // ! TEXT FIELD CONTROLLER
   TextEditingController textController = TextEditingController();
 
+  //! PAGE CONTROLLER
   PageController pageController = PageController();
   RxInt indexPage = 0.obs;
 
+  //! CATEGORY
   RxInt indexCategori = 0.obs;
 
-  Rx<TrendingNowModel> trendingNow = TrendingNowModel().obs;
+  //! TRENDING NOW
+  Rx<PopularModel> trendingNow = PopularModel().obs;
   RxBool isLoadTrending = true.obs;
 
+  //! POPULAR
   Rx<PopularModel> popular = PopularModel().obs;
   RxBool isLoadPopular = true.obs;
 
-  FocusNode inputFocusNode = FocusNode();
-
+  //! FAV ITEM
   RxList<ResultPopular> favItem = <ResultPopular>[].obs;
+
+  //! RECENT ITEM
+  RxList<ResultPopular> recentItem = <ResultPopular>[].obs;
 
   setPage(int index) => indexPage.value = index;
 
@@ -91,7 +98,7 @@ class HomeController extends GetxController {
   getTrendingNow() async {
     isLoadTrending(true);
     final h = await ApiService().request(url: 'recipes', method: Method.GET);
-    trendingNow.value = TrendingNowModel.fromJson(h);
+    trendingNow.value = PopularModel.fromJson(h);
     isLoadTrending(false);
   }
 
@@ -111,11 +118,11 @@ class HomeController extends GetxController {
   addToFav({required ResultPopular data}) {
     try {
       if (favItem.any((element) => element == data)) {
-        FavService.removeFav(data.title!);
+        FavService.removeFav(data.key!);
         favItem.remove(data);
       } else {
-        FavService.addFav(title: data.title!, imageUrl: data.thumb!);
-        favItem.add(data);
+        FavService.addFav(title: data.key!, imageUrl: data.thumb!);
+        favItem.insert(0, data);
       }
       logSys('item favorite : ${favItem.length}');
     } catch (e) {
@@ -123,18 +130,48 @@ class HomeController extends GetxController {
     }
   }
 
-  clearAllFavorite() {
-    FavService.removeAll();
+  addToRecent({required ResultPopular data}) {
+    if (recentItem.any((element) => element == data)) {
+      RecentService.removeRecent(data.key!);
+      recentItem
+        ..remove(data)
+        ..insert(0, data);
+    } else {
+      RecentService.addRecent(title: data.key!, imageUrl: data.thumb!);
+      recentItem.insert(0, data);
+    }
+  }
+
+  loadDbFav() {
     favItem.clear();
+    for (var i = 0; i < FavService.favItem.length; i++) {
+      final item = ResultPopular(
+        key: FavService.favItem[i]['title'],
+        thumb: FavService.favItem[i]['image_url'],
+      );
+      favItem.add(item);
+    }
     logSys('item favorite : ${favItem.length}');
+  }
+
+  loadDbRecent() {
+    recentItem.clear();
+    for (var i = 0; i < RecentService.recent.length; i++) {
+      final item = ResultPopular(
+        key: RecentService.recent[i]['title'],
+        thumb: RecentService.recent[i]['image_url'],
+      );
+      recentItem.add(item);
+    }
+    logSys('item recent : ${recentItem.length}');
   }
 
   @override
   void onInit() {
     getTrendingNow();
     getPopular(recipesCategory[indexCategori.value]['key']);
-
-    logSys('item favorite : ${FavService.favItem.length}');
+    loadDbFav();
+    loadDbRecent();
     super.onInit();
   }
 

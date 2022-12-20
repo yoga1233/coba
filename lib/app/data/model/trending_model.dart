@@ -1,19 +1,23 @@
 class TrendingNowModel {
-  TrendingNowModel({this.method, this.status, this.results});
+  TrendingNowModel({
+    this.method,
+    this.status,
+    this.results = const <ResultsTrending>[],
+  });
 
   TrendingNowModel.fromJson(Map<String, dynamic> json) {
     method = json['method'];
     status = json['status'];
     if (json['results'] != null) {
-      results = <Results>[];
+      results = <ResultsTrending>[];
       json['results'].forEach((v) {
-        results!.add(Results.fromJson(v));
+        results!.add(ResultsTrending.fromJson(v));
       });
     }
   }
   String? method;
   bool? status;
-  List<Results>? results;
+  List<ResultsTrending>? results;
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
@@ -26,8 +30,8 @@ class TrendingNowModel {
   }
 }
 
-class Results {
-  Results({
+class ResultsTrending {
+  ResultsTrending({
     this.title,
     this.thumb,
     this.key,
@@ -36,7 +40,7 @@ class Results {
     this.difficulty,
   });
 
-  Results.fromJson(Map<String, dynamic> json) {
+  ResultsTrending.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     thumb = json['thumb'];
     key = json['key'];
